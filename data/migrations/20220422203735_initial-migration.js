@@ -12,9 +12,11 @@ exports.up = async function (knex) {
       //project_completed
 
       table.increments("project_id");
-      table.string("project_name", 64);
+      table.string("project_name", 64)
+	  .notNullable();
       table.string("project_description");
-      table.integer("project_completed", 0);
+      table.boolean("project_completed")
+	  	.defaultTo(0);
     })
     .createTable("resources", (table) => {
       //resources
@@ -24,7 +26,8 @@ exports.up = async function (knex) {
 
       table.increments("resource_id");
       table.string("resource_name", 64)
-		.unique();
+		.unique()
+		.notNullable();
       table.string("resource_description");
 
     })
@@ -39,7 +42,8 @@ exports.up = async function (knex) {
 
 
       table.increments("task_id");
-      table.string("tasks_description");
+      table.string("tasks_description")
+	  	.notNullable();
       table.string("task_notes");
       table.integer("task_completed", 0);
 	  table.integer("project_id")
