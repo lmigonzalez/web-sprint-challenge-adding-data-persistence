@@ -2,12 +2,17 @@ const db = require('../../data/dbConfig')
 
 
 async function getTasks(){
-
+	
 	let tasks = await db('tasks')
-
+	let projects = await db('projects')
+	
+	
 	const newTasks = []
+	
+	
+	let num = 0
+	tasks.map((element, index)=>{
 
-	tasks.map((element=>{
 		if(element.task_completed === 0){
 			element.task_completed = false
 		}
@@ -18,13 +23,16 @@ async function getTasks(){
 			task_description: element.task_description,
 			task_notes: element.task_notes,
 			task_completed: element.task_completed,
-			project_name: element.project_name,
-			project_description: element.project_description,
+			project_name: projects[num].project_name,
+			project_description: projects[num].project_description,
+		
 		})
-	}))
 
-
+		num = index
+	})
+	
 	return newTasks
+
 
 }
 

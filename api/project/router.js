@@ -1,43 +1,36 @@
-const router = require('express').Router()
+const router = require("express").Router();
 
-const Project = require('./model')
+const Project = require("./model");
 
-router.get('/', (req, res, next)=>{
-	
-	Project.getProjects()
+router.get("/", (req, res, next) => {
+  Project.getProjects()
 
-	.then(projects =>{
-		
-			res.status(200).json(projects)	
-	})
-	
-	.catch(err=>{
-		next({
-			status: 404, message: err,
-		})
-	})
-})
+    .then((projects) => {
+      res.status(200).json(projects);
+    })
 
-router.post('/', (req, res, next)=>{
-	const newProject = req.body
+    .catch((err) => {
+      next({
+        status: 404,
+        message: err,
+      });
+    });
+});
 
-	Project.addProject(newProject)
+router.post("/", (req, res, next) => {
+  const newProject = req.body;
 
-		.then(newProject=>{
-			res.status(201).json(newProject)
-		})
-		.catch(err=>{
-			next({
-				message: err.message,
-			})
-		})
+  Project.addProject(newProject)
 
-
-
-})
-
-
-
+    .then((newProject) => {
+      res.status(201).json(newProject);
+    })
+    .catch((err) => {
+      next({
+        message: err.message,
+      });
+    });
+});
 
 // router.use((err, req, res, next)=>{
 // 	res.use(500).json({
@@ -47,4 +40,4 @@ router.post('/', (req, res, next)=>{
 // 	})
 // })
 
-module.exports= router
+module.exports = router;
