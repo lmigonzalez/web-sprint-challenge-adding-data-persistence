@@ -12,11 +12,9 @@ exports.up = async function (knex) {
       //project_completed
 
       table.increments("project_id");
-      table.string("project_name", 64)
-	  .notNullable();
+      table.string("project_name", 64).notNullable();
       table.string("project_description");
-      table.boolean("project_completed")
-	  	.defaultTo(0);
+      table.boolean("project_completed").defaultTo(0);
     })
     .createTable("resources", (table) => {
       //resources
@@ -25,11 +23,8 @@ exports.up = async function (knex) {
       //resource_description
 
       table.increments("resource_id");
-      table.string("resource_name", 64)
-		.unique()
-		.notNullable();
+      table.string("resource_name", 64).unique().notNullable();
       table.string("resource_description");
-
     })
     .createTable("tasks", (table) => {
       //tasks
@@ -37,39 +32,38 @@ exports.up = async function (knex) {
       //task_description
       //task_notes
       //task_completed
-	    //------
- 	 //project_id --required and points to an actual project_id in the projects table
-
+      //------
+      //project_id --required and points to an actual project_id in the projects table
 
       table.increments("task_id");
-      table.string("tasks_description")
-	  	.notNullable();
+      table.string("task_description").notNullable();
       table.string("task_notes");
-      table.integer("task_completed", 0);
-	  table.integer("project_id")
-		.unsigned()
-		.notNullable()
-		.references("project_id")
-		.inTable("projects")
+      table.boolean("task_completed").defaultTo(0);
+      table
+        .integer("project_id")
+        .unsigned()
+        .notNullable()
+        .references("project_id")
+        .inTable("projects");
     })
 
-	.createTable("project_resources", (table) =>{
+    .createTable("project_resources", (table) => {
+      table
+        .integer("resource_id")
+        .unsigned()
+        .notNullable()
+        .references("resource_id")
+        .inTable("resources");
 
-		table.integer("resource_id")
-			.unsigned()
-			.notNullable()
-			.references("resource_id")
-			.inTable("resources")
+      table
+        .integer("project_id")
+        .unsigned()
+        .notNullable()
+        .references("project_id")
+        .inTable("projects");
 
-		table.integer("project_id")
-		.unsigned()
-		.notNullable()
-		.references("project_id")
-		.inTable("projects")
-
-		table.primary("resource_id", "project_id")
-	})
-
+      table.primary("resource_id", "project_id");
+    });
 
   //project_resources --connects a resource and a project,
 };
@@ -78,11 +72,10 @@ exports.up = async function (knex) {
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.down = async function(knex) {
-	return knex.schema
-		.dropTableIfExists("project_resources")
-		.dropTableIfExists("tasks")
-		.dropTableIfExists("resources")
-		.dropTableIfExists("projects")
-
+exports.down = async function (knex) {
+  return knex.schema
+    .dropTableIfExists("project_resources")
+    .dropTableIfExists("tasks")
+    .dropTableIfExists("resources")
+    .dropTableIfExists("projects");
 };
