@@ -15,6 +15,21 @@ router.get('/', (req, res, next)=>{
 })
 
 
+router.post('/', (req, res, next)=>{
+	const newResource = req.body
+
+	Resource.addResource(newResource)
+	.then(newResource=>{
+		res.status(201).json(newResource)
+	})
+	.catch(err=>{
+		next({
+			message: err.message,
+		})
+	})
+})
+
+
 
 
 // router.use((err, req, res, next)=>{
